@@ -92,7 +92,7 @@ df = pd.read_csv("https://raw.githubusercontent.com/CharlyWargnier/CSVHub/main/C
 df.info()
 '''
 
-st.stop()
+#st.stop()
 ##############################################
 
 
