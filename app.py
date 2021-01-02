@@ -96,8 +96,18 @@ df.info()
 ##############################################
 
 
-st.header('Tommy-Macys-encoding')
-df = pd.read_csv("https://raw.githubusercontent.com/CharlyWargnier/CSVHub/main/CK-Tommy-All/Tommy-Macys-encoding-ISO-8859-1/Ludwig%20Files%20-December%202020/TH_tagged_deduped_dec_2020.csv")
+st.header('Files! Tommy-Macys or Reuters')
+
+#df = pd.read_csv("https://raw.githubusercontent.com/CharlyWargnier/CSVHub/main/CK-Tommy-All/Tommy-Macys-encoding-ISO-8859-1/Ludwig%20Files%20-December%202020/TH_tagged_deduped_dec_2020.csv")
+
+#Tommy-Macys
+#df = pd.read_csv("https://raw.githubusercontent.com/CharlyWargnier/CSVHub/main/CK-Tommy-All/Tommy-Macys-encoding-ISO-8859-1/Ludwig%20Files%20-December%202020/TH_tagged_deduped_dec_2020.csv")
+
+#Reuters
+df = pd.read_csv("https://raw.githubusercontent.com/CharlyWargnier/CSVHub/main/FromLudwigsWebsite/reuters-allcats.csv")
+
+
+
 df
 
 
