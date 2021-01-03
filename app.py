@@ -4,24 +4,60 @@ from ludwig.api import LudwigModel
 import io
 import pandas as pd
 import json
+import os
+cwd = os.getcwd()
 
 
+st.markdown("---")
 
-#import pandas as pd
-#import pandas as pd
-#import streamlit as st
-#from pyecharts import options as opts
-#from pyecharts.charts import Tree
-#from streamlit_echarts import st_echarts
+st.title('Ludwig App - train + load models ')
+
+with st.beta_expander("📝 - Roadmap ⯈", expanded=True):
+  st.write("""   
+- Try to load saved file on CWD on S4
+- Add 'IF Function'-> if files are downloaded on CWD, then load directly
+- Try to cache training model (might not be essential as files will be saved)
+- Cache final table
+- Then add slider to filter accuracy
+ 
+ """)
 
 
-#import requests
-#import base64
-#import time
-#import os
+with st.beta_expander(" Done ", expanded=True):
+  st.write("""   
+- Get the training to load on the uploaded CSV file 
+- Add auto-rename on columns from other file!
+
+ """)
 
 
-st.title('Ludwig App')
+st.markdown("---")
+
+st.header('Files are located: "Desktop\LudwigNew\CSVFilesToUpload"')
+
+c1, c2, c3 = st.beta_columns(3)
+
+with c1:
+    st.write('TH_tagged_deduped_dec_2020')
+    st.write('https://bit.ly/2KZEtZI')
+
+with c2:
+    st.write('Tommy-Macys-300')
+    st.write('https://bit.ly/3b4cJhu')
+
+with c3:
+    st.write('Reuters')
+    st.write('https://bit.ly/3o9Zqzr')
+
+
+#Reuters
+#df = pd.read_csv("https://raw.githubusercontent.com/CharlyWargnier/CSVHub/main/FromLudwigsWebsite/reuters-allcats.csv")
+
+#df = pd.read_csv("https://raw.githubusercontent.com/CharlyWargnier/CSVHub/main/CK-Tommy-All/Tommy-Macys-encoding-ISO-8859-1/Ludwig%20Files%20-December%202020/THKeywordsTrainingSet300.csv")
+#Reuters
+#df = pd.read_csv("https://raw.githubusercontent.com/CharlyWargnier/CSVHub/main/FromLudwigsWebsite/reuters-allcats.csv")
+
+#st.stop()
 
 ##################################################
 
@@ -29,7 +65,6 @@ st.title('Ludwig App')
 
 def _max_width_():
     max_width_str = f"max-width: 1600px;"
-    #max_width_str = f"max-width: 1550px;"
     st.markdown(
         f"""
     <style>
@@ -69,7 +104,7 @@ with c2:
     st.write('')
     st.success('file 1 uploaded')
     st.success('file 2 uploaded')
-
+    st.success('file 3 uploaded')
 
 ############################################
 
@@ -86,27 +121,15 @@ df = dfs[0]
 df.columns = ["doc_text", "class"]
 df
 
-'''
-import pandas as pd
-df = pd.read_csv("https://raw.githubusercontent.com/CharlyWargnier/CSVHub/main/CK-Tommy-All/Tommy-Macys-encoding-ISO-8859-1/Ludwig%20Files%20-December%202020/TH_tagged_deduped_dec_2020.csv",names=header_list)
-df.info()
-'''
-
-#st.stop()
-##############################################
-
-
 st.header('Files! Tommy-Macys or Reuters')
-
+#Tommy-Macys-10K
 #df = pd.read_csv("https://raw.githubusercontent.com/CharlyWargnier/CSVHub/main/CK-Tommy-All/Tommy-Macys-encoding-ISO-8859-1/Ludwig%20Files%20-December%202020/TH_tagged_deduped_dec_2020.csv")
 
-#Tommy-Macys
-#df = pd.read_csv("https://raw.githubusercontent.com/CharlyWargnier/CSVHub/main/CK-Tommy-All/Tommy-Macys-encoding-ISO-8859-1/Ludwig%20Files%20-December%202020/TH_tagged_deduped_dec_2020.csv")
+#Tommy-Macys-300
+#df = pd.read_csv("https://raw.githubusercontent.com/CharlyWargnier/CSVHub/main/CK-Tommy-All/Tommy-Macys-encoding-ISO-8859-1/Ludwig%20Files%20-December%202020/THKeywordsTrainingSet300.csv")
 
 #Reuters
-df = pd.read_csv("https://raw.githubusercontent.com/CharlyWargnier/CSVHub/main/FromLudwigsWebsite/reuters-allcats.csv")
-
-
+#df = pd.read_csv("https://raw.githubusercontent.com/CharlyWargnier/CSVHub/main/FromLudwigsWebsite/reuters-allcats.csv")
 
 df
 
@@ -127,7 +150,6 @@ model = LudwigModel(config)
 
 train_stats, _, _ = model.train(dataset=df)
 
-
 st.header('Eval Stats')
 eval_stats, _, _ = model.evaluate(dataset=df)
 #st.write(eval_stats)
@@ -144,10 +166,39 @@ df = pd.DataFrame([eval_stats], columns=eval_stats.keys())
 st.table(df)
 
 
+######################
+#Save model
+
+#Works
+#model.save('C:/Users/Charly/Desktop/LudwigNew/')
+
+#Works
+model.save(cwd)
+
+#Load model
+#modelLoaded = LudwigModel.load('C:/Users/Charly/Desktop/LudwigNew/')
+modelLoaded = LudwigModel.load(cwd)
 
 
+# New set, deduped
+#df2 = pd.read_csv("https://raw.githubusercontent.com/CharlyWargnier/CSVHub/main/CK-Tommy-All/Tommy-Macys-encoding-ISO-8859-1/For%20Ludwig/TH_NOT_tagged_deduped_dec_2020.csv")
+df2 = pd.read_csv("https://raw.githubusercontent.com/CharlyWargnier/CSVHub/main/CK-Tommy-All/Tommy-Macys-encoding-ISO-8859-1/Ludwig%20Files%20-December%202020/TH_NOT_tagged_deduped_dec_2020.csv")
+#df2.head()
+df2
 
+# Predict on new dataset
+predictions, _ = modelLoaded.predict(dataset=df2)
+#predictions
 
+# ETL on predicted dataset
+## Removed unsued columns
+predictionsNew = predictions[['class_predictions', 'class_probability']]
+#predictionsNew.head(3)
+predictionsNew
 
+## Merge df2 and predictions on indices
+dfFinal2 = pd.merge(predictionsNew, df2, left_index=True, right_index=True)
+#dfFinal2.head(2)
+st.table(dfFinal2)
 
 
