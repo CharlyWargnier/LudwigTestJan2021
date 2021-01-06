@@ -189,14 +189,14 @@ def page_dashboard(state):
     dfFinal2 = dfFinal2.reindex(columns=column_names)
     
     st.header("")
-    v1 = st.beta_container()   
+    c = st.beta_container()   
     st.table(dfFinal2)
 
     try:
         csv = dfFinal2.to_csv(index=False)
         b64 = base64.b64encode(csv.encode()).decode()
-        v1.markdown('## **③ Check results or download CSV **')
-        st.subheader("")
+        c.markdown('## **③ Check results or download CSV **')
+        c.subheader("")
         href = f'<a href="data:file/csv;base64,{b64}" download="filtered_table.csv">** ⯈ Download link 🎁 **</a>'
         st.markdown(href, unsafe_allow_html=True)
     
@@ -269,8 +269,8 @@ def page_settings(state):
         st.write(json_object)  
         st.write('separate dictionnaries from main dictionnary')
         df = pd.DataFrame([eval_stats], columns=eval_stats.keys())
-        #st.table("df")
-        #st.table(df)
+        st.table("df")
+        st.table(df)
 
         #Save model
         model.save(cwd)
