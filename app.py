@@ -269,8 +269,8 @@ def page_settings(state):
         st.write(json_object)  
         st.write('separate dictionnaries from main dictionnary')
         df = pd.DataFrame([eval_stats], columns=eval_stats.keys())
-        st.table("df")
-        st.table(df)
+        #st.table("df")
+        #st.table(df)
 
         #Save model
         model.save(cwd)
