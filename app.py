@@ -7,6 +7,14 @@ import json
 import os
 cwd = os.getcwd()
 
+
+#cwd = os.getcwd()
+cwd
+
+[x[0] for x in os.walk(cwd)]
+
+
+
 #import streamlit as st
 from streamlit.hashing import _CodeHasher
 
