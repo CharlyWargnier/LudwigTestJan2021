@@ -149,7 +149,7 @@ def page_dashboard(state):
         #st.success('ModelFiles_are_saved')
      
     
-    uploaded_file = st.file_uploader("Choose a file", key = 1)
+    uploaded_file = st.file_uploader("Choose a file", key = "1")
     if uploaded_file is not None:
         # Can be used wherever a "file-like" object is accepted:
         dfPredictions = pd.read_csv(uploaded_file)
@@ -234,7 +234,7 @@ def page_settings(state):
         import io
         import base64
 
-        uploaded_file = st.file_uploader("Choose a file", key = 2)
+        uploaded_file = st.file_uploader("Choose a file", key = "2")
 
         if uploaded_file is not None:
             # Can be used wherever a "file-like" object is accepted:
